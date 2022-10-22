@@ -18,10 +18,10 @@ public class Command implements CommandExecutor {
             player.sendMessage("§cLe joueur précisé n'est pas connecté !");
             return false;
         }
-        if(destinataire == player){
-            player.sendMessage("§cTu ne peux pas jouer avec toi même !");
-            return false;
-        }
+        //if(destinataire == player){
+        //    player.sendMessage("§cTu ne peux pas jouer avec toi même !");
+        //    return false;
+        //}
         if(args[0].equals("accept")){
             if(Game.LastAsker.containsKey(player)){
                 Interaction.acceptRequest(player);

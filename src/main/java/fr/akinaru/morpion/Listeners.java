@@ -29,7 +29,15 @@ public class Listeners implements Listener {
         String nom = e.getView().getTitle();
 
         if(nom.contains("§7Morpion")){
+            if(Game.JeuTour.get(player).equals(player)){
 
+
+                Player adversaire = (Player) Game.Jeu.get(player);
+                InventoryManager.showInventory(player);
+                InventoryManager.showInventory(adversaire);
+                Game.PoserPion(player, e);
+
+            }
             e.setCancelled(true);
         }
     }
