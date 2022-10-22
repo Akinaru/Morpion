@@ -23,6 +23,7 @@ public class Interaction implements Listener {
         Game.Jeu.put(adversaire, player);
         Game.LastAsker.remove(player);
         Game.LastAsker.remove(adversaire);
+        Game.startGame(player, adversaire);
 
     }
 
