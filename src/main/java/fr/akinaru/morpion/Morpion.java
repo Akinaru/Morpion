@@ -9,7 +9,7 @@ public final class Morpion extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         System.out.println("Plugin de Morpion activé !");
-
+        getCommand("morpion").setExecutor(new Command());
     }
 
     @Override
