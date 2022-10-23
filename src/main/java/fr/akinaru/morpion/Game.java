@@ -2,6 +2,7 @@ package fr.akinaru.morpion;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,7 +23,9 @@ public class Game implements Listener {
     public static Table<Player, Integer, Player> JeuEnplacementPions = HashBasedTable.create();
 
 
-
+    public static void stopGame(Player player){
+        SupprimerJoueur(player);
+    }
 
     public static void startGame(Player player1, Player player2){
         Game.JeuTour.put(player1, player1);
@@ -36,6 +39,52 @@ public class Game implements Listener {
         InventoryManager.OpenInventory(player1);
         InventoryManager.OpenInventory(player2);
 
+    }
+
+
+    public static boolean PionPlacedBy(Player player, Integer position){
+        if(Game.JeuEnplacementPions.contains(player, position) && Game.JeuEnplacementPions.get(player, position).equals(player)) return true;
+        else return false;
+    }
+
+    private static void Win(Player player){
+        Player adversaire = Game.JeuAdversaire.get(player);
+        player.sendMessage("§7Tu as gagné !");
+        adversaire.sendMessage("§6"+player.getName()+" §7a gagné la partie !");
+        stopGame(player);
+        stopGame(adversaire);
+    }
+
+    public static boolean CheckWin(Player player) {
+        Player adversaire = Game.JeuAdversaire.get(player);
+        if(PionPlacedBy(player, 12) && PionPlacedBy(player,13) && PionPlacedBy(player,14)) return true; // en haut horizontale
+        if(PionPlacedBy(player, 21) && PionPlacedBy(player,22) && PionPlacedBy(player,23)) return true; //au millieu horizontale
+        if(PionPlacedBy(player, 30) && PionPlacedBy(player,31) && PionPlacedBy(player,32)) return true; // en bas horizontale
+
+        if(PionPlacedBy(player, 12) && PionPlacedBy(player,21) && PionPlacedBy(player,30)) return true; // a gauche verticale
+        if(PionPlacedBy(player, 13) && PionPlacedBy(player,22) && PionPlacedBy(player,32)) return true; //au millieu verticale
+        if(PionPlacedBy(player, 14) && PionPlacedBy(player,23) && PionPlacedBy(player,32)) return true; // a droite verticale
+
+        if(PionPlacedBy(player, 12) && PionPlacedBy(player,22) && PionPlacedBy(player,32)) return true; // diagonale gauche vers droite
+        if(PionPlacedBy(player, 14) && PionPlacedBy(player,22) && PionPlacedBy(player,30)) return true; // diagonale droite vers gauche
+
+        else return false;
+    }
+
+    public static void CheckPion(Inventory inv, Player player, Integer numero){
+        if (Game.JeuEnplacementPions.contains(player, 12) && Game.JeuEnplacementPions.get(player, 12).equals(player)) InventoryManager.CreatePion(inv, player, numero, 12);
+        if (Game.JeuEnplacementPions.contains(player, 13) && Game.JeuEnplacementPions.get(player, 13).equals(player)) InventoryManager.CreatePion(inv, player, numero, 13);
+        if (Game.JeuEnplacementPions.contains(player, 14) && Game.JeuEnplacementPions.get(player, 14).equals(player)) InventoryManager.CreatePion(inv, player, numero, 14);
+        if (Game.JeuEnplacementPions.contains(player, 21) && Game.JeuEnplacementPions.get(player, 21).equals(player)) InventoryManager.CreatePion(inv, player, numero, 21);
+        if (Game.JeuEnplacementPions.contains(player, 22) && Game.JeuEnplacementPions.get(player, 22).equals(player)) InventoryManager.CreatePion(inv, player, numero, 22);
+        if (Game.JeuEnplacementPions.contains(player, 23) && Game.JeuEnplacementPions.get(player, 23).equals(player)) InventoryManager.CreatePion(inv, player, numero, 23);
+        if (Game.JeuEnplacementPions.contains(player, 30) && Game.JeuEnplacementPions.get(player, 30).equals(player)) InventoryManager.CreatePion(inv, player, numero, 30);
+        if (Game.JeuEnplacementPions.contains(player, 31) && Game.JeuEnplacementPions.get(player, 31).equals(player)) InventoryManager.CreatePion(inv, player, numero, 31);
+        if (Game.JeuEnplacementPions.contains(player, 32) && Game.JeuEnplacementPions.get(player, 32).equals(player)) InventoryManager.CreatePion(inv, player, numero, 32);
+        if(Game.CheckWin(player)){
+            Win(player);
+
+        }
     }
 
     public static void changeTour(Player player){
@@ -53,8 +102,6 @@ public class Game implements Listener {
         Player adversaire = (Player) Game.JeuAdversaire.get(player);
         JeuEnplacementPions.put(player, e.getSlot(), player);
         JeuEnplacementPions.put(adversaire, e.getSlot(), player);
-        player.sendMessage("Tu as posé un pion sur le slot "+e.getSlot());
-        adversaire.sendMessage("le slot "+e.getSlot()+" appartient à "+JeuEnplacementPions.get(player, e.getSlot()));
         Game.changeTour(player);
         Game.InventaireJoueur.remove(player);
         Game.InventaireJoueur.remove(adversaire);

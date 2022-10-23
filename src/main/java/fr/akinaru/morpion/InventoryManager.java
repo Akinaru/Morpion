@@ -147,7 +147,7 @@ public class InventoryManager implements Listener{
 
     }
 
-    private static void CreatePion(Inventory inv, Player player,Integer joueurNumero, Integer position){
+    public static void CreatePion(Inventory inv, Player player,Integer joueurNumero, Integer position){
         if(joueurNumero == 1){
             ItemStack item = new ItemStack(Material.ORANGE_DYE);
             ItemMeta itemMeta = item.getItemMeta();
@@ -167,30 +167,18 @@ public class InventoryManager implements Listener{
         if(Game.JeuNumeroJoueur.get(player) == 1){
             Player player1 = (Player) player;
             Player player2 = (Player) Game.JeuAdversaire.get(player);
-            CheckPion(inv, player1,1);
-            CheckPion(inv, player2,2);
+            Game.CheckPion(inv, player1,1);
+            Game.CheckPion(inv, player2,2);
 
         }else{
             Player player2 = (Player) player;
             Player player1 = (Player) Game.JeuAdversaire.get(player);
-            CheckPion(inv, player1,1);
-            CheckPion(inv, player2,2);
+            Game.CheckPion(inv, player1,1);
+            Game.CheckPion(inv, player2,2);
         }
 
     }
 
-    private static void CheckPion(Inventory inv, Player player, Integer numero){
-            if (Game.JeuEnplacementPions.contains(player, 12) && Game.JeuEnplacementPions.get(player, 12).equals(player)) CreatePion(inv, player, numero, 12);
-            if (Game.JeuEnplacementPions.contains(player, 13) && Game.JeuEnplacementPions.get(player, 13).equals(player)) CreatePion(inv, player, numero, 13);
-            if (Game.JeuEnplacementPions.contains(player, 14) && Game.JeuEnplacementPions.get(player, 14).equals(player)) CreatePion(inv, player, numero, 14);
-            if (Game.JeuEnplacementPions.contains(player, 21) && Game.JeuEnplacementPions.get(player, 21).equals(player)) CreatePion(inv, player, numero, 21);
-            if (Game.JeuEnplacementPions.contains(player, 22) && Game.JeuEnplacementPions.get(player, 22).equals(player)) CreatePion(inv, player, numero, 22);
-            if (Game.JeuEnplacementPions.contains(player, 23) && Game.JeuEnplacementPions.get(player, 23).equals(player)) CreatePion(inv, player, numero, 23);
-            if (Game.JeuEnplacementPions.contains(player, 30) && Game.JeuEnplacementPions.get(player, 30).equals(player)) CreatePion(inv, player, numero, 30);
-            if (Game.JeuEnplacementPions.contains(player, 31) && Game.JeuEnplacementPions.get(player, 31).equals(player)) CreatePion(inv, player, numero, 31);
-            if (Game.JeuEnplacementPions.contains(player, 32) && Game.JeuEnplacementPions.get(player, 32).equals(player)) CreatePion(inv, player, numero, 32);
-
-    }
 
     private static void placeTete(Inventory inv, Player player){
         ItemStack skull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);

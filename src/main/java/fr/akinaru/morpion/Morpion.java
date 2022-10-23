@@ -1,6 +1,7 @@
 package fr.akinaru.morpion;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,7 +21,14 @@ public final class Morpion extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if(!Game.JeuAdversaire.isEmpty()) {
+            for (Player players : Bukkit.getOnlinePlayers()) {
+                if (Game.JeuAdversaire.containsKey(players)) {
+                    players.sendMessage("§cLa partie a été interrompue.");
+                    Game.stopGame(players);
+                }
+            }
+        }
     }
 
     public static Morpion getPlugin(){
