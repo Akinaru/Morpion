@@ -7,14 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Morpion extends JavaPlugin {
 
-    public Plugin plugin;
-    private static Morpion instance;
-    public static Morpion getInstance() { return instance; }
+    private static Morpion plugin;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        instance = this;
+        plugin = this;
         System.out.println("Plugin de Morpion activé !");
         getCommand("morpion").setExecutor(new Command());
         this.getServer().getPluginManager().registerEvents((Listener)new Listeners(), (Plugin)this);
@@ -23,5 +21,9 @@ public final class Morpion extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public static Morpion getPlugin(){
+        return plugin;
     }
 }

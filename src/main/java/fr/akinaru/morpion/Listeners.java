@@ -1,9 +1,9 @@
 package fr.akinaru.morpion;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -12,13 +12,22 @@ import org.bukkit.inventory.Inventory;
 
 public class Listeners implements Listener {
 
-    static Morpion plugin;
 
     @EventHandler
     public static void Disconnect(PlayerQuitEvent e) {
         Player player = (Player) e.getPlayer();
         if (Game.LastAsker.containsKey(player)) {
             Game.LastAsker.remove(player);
+
+        }if(Game.InventaireJoueur.containsKey(player)){
+            Game.InventaireJoueur.remove(player);
+        }
+        if(Game.JeuAdversaire.containsKey(player)){
+            Player adversaire = (Player) Game.JeuAdversaire.get(player);
+            Game.SupprimerJoueur(player);
+            Game.SupprimerJoueur(adversaire);
+            adversaire.closeInventory();
+            adversaire.sendMessage("§7Tu as gagné par forfait !");
         }
     }
 
@@ -29,14 +38,14 @@ public class Listeners implements Listener {
         String nom = e.getView().getTitle();
 
         if(nom.contains("§7Morpion")){
+
             if(Game.JeuTour.get(player).equals(player)){
+                if(e.getCurrentItem() != null && e.getCurrentItem().getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)){
+                    if(e.getCurrentItem().getItemMeta().getDisplayName().contains("§7Case Libre")){
+                        Game.PoserPion(player, e);
 
-
-                Player adversaire = (Player) Game.Jeu.get(player);
-                InventoryManager.showInventory(player);
-                InventoryManager.showInventory(adversaire);
-                Game.PoserPion(player, e);
-
+                    }
+                }
             }
             e.setCancelled(true);
         }
@@ -46,9 +55,12 @@ public class Listeners implements Listener {
     public static void InventoryClose(InventoryCloseEvent e){
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
-        String nom = e.getView().getTitle();
-        if(nom.contains("§7Morpion")){
-            //
+        String name = e.getView().getTitle();
+        if(name.contains("§7Morpion")){
+            Game.InventaireJoueur.remove(player);
+            Bukkit.getScheduler().runTaskLater(Morpion.getPlugin(), () -> {
+                InventoryManager.OpenInventory(player);
+            }, 20L/10);
         }
     }
 

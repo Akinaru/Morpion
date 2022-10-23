@@ -18,12 +18,6 @@ public class Interaction implements Listener {
     public static void acceptRequest(Player player){
         Player adversaire = (Player) Game.LastAsker.get(player);
         adversaire.sendMessage("§5"+player.getName()+" §7a accepté le duel de Morpion !");
-        Game.Jeu.put(player, adversaire);
-        Game.Jeu.put(adversaire, player);
-        Game.JeuTour.put(player, player);
-        Game.JeuTour.put(adversaire, player);
-        Game.LastAsker.remove(player);
-        Game.LastAsker.remove(adversaire);
         Game.startGame(player, adversaire);
 
     }
