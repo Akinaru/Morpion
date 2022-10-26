@@ -26,8 +26,10 @@ public class InventoryManager implements Listener{
     }
 
     public static void UpdateInventory(Player player){
-        Inventory inv = Game.InventaireJoueur.get(player);
-        CreateItems(player, inv);
+        if(Game.JeuTour.get(player) != null ) {
+            Inventory inv = Game.InventaireJoueur.get(player);
+            CreateItems(player, inv);
+        }
     }
 
     private static void CreateItems(Player player, Inventory inv){
@@ -39,11 +41,13 @@ public class InventoryManager implements Listener{
         papierMeta.setDisplayName("§7Morpion");
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§f ");
-        if(Game.JeuTour.get(player).equals(player)){
-            lore.add("§7Tour actuel: §9"+player.getName());
-        }else{
-            Player adversaire = (Player) Game.JeuAdversaire.get(player);
-            lore.add("§7Tour actuel: §9"+adversaire.getName());
+        if(Game.JeuTour.get(player) != null ) {
+            if (Game.JeuTour.get(player).equals(player)) {
+                lore.add("§7Tour actuel: §9" + player.getName());
+            } else {
+                Player adversaire = (Player) Game.JeuAdversaire.get(player);
+                lore.add("§7Tour actuel: §9" + adversaire.getName());
+            }
         }
         papierMeta.setLore(lore);
         papier.setItemMeta(papierMeta);
@@ -54,7 +58,7 @@ public class InventoryManager implements Listener{
         Player adversaire = (Player) Game.JeuAdversaire.get(player);
 
         ItemStack vitre = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
-        ItemStack vitreGrise = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemStack vitreGrise = new ItemStack(Material.RED_STAINED_GLASS_PANE);
         ItemStack vitreGriseClair = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
         ItemStack vitreVerte = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
 
@@ -104,7 +108,7 @@ public class InventoryManager implements Listener{
         inv.setItem(31,vitreGriseClair);
         inv.setItem(32,vitreGriseClair);
 
-        if(Game.JeuTour.get(player).equals(player)){
+        if(!(Game.JeuTour.get(player) == null) && Game.JeuTour.get(player).equals(player)){
             //gauche
             inv.setItem(9,vitreVerte);
             inv.setItem(10,vitreVerte);
@@ -181,36 +185,42 @@ public class InventoryManager implements Listener{
 
 
     private static void placeTete(Inventory inv, Player player){
-        ItemStack skull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        skullMeta.setDisplayName("§9Toi §8(§7"+player.getName()+"§8)");
-        skullMeta.setOwner(player.getName());
-        ArrayList<String> lore = new ArrayList<String>();
-        lore.add("§f ");
-        if(Game.JeuNumeroJoueur.get(player) == 1){
-            lore.add("§7Couleur de pion: §6Orange");
-        }else{
-            lore.add("§7Couleur de pion: Gris");
-        }
-        skullMeta.setLore(lore);
-        skull.setItemMeta(skullMeta);
+        if(Game.JeuTour.get(player) != null ) {
+            ItemStack skull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);
+            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+            skullMeta.setDisplayName("§9Toi §8(§7" + player.getName() + "§8)");
+            skullMeta.setOwner(player.getName());
+            ArrayList<String> lore = new ArrayList<String>();
+            lore.add("§f ");
+            if (Game.JeuTour.get(player) != null) {
+                if (Game.JeuNumeroJoueur.get(player) == 1) {
+                    lore.add("§7Couleur de pion: §6Orange");
+                } else {
+                    lore.add("§7Couleur de pion: Gris");
+                }
+            }
+            skullMeta.setLore(lore);
+            skull.setItemMeta(skullMeta);
 
-        Player adversaire = (Player) Game.JeuAdversaire.get(player);
-        ItemStack skull2 = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);
-        SkullMeta skull2Meta = (SkullMeta) skull2.getItemMeta();
-        skull2Meta.setDisplayName("§9"+adversaire.getName());
-        skull2Meta.setOwner(adversaire.getName());
-        ArrayList<String> lore2 = new ArrayList<String>();
-        lore2.add("§f ");
-        if(Game.JeuNumeroJoueur.get(adversaire) == 1){
-            lore2.add("§7Couleur de pion: §6Orange");
-        }else{
-            lore2.add("§7Couleur de pion: Gris");
-        }
-        skull2Meta.setLore(lore2);
-        skull2.setItemMeta(skull2Meta);
+            Player adversaire = (Player) Game.JeuAdversaire.get(player);
+            ItemStack skull2 = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);
+            SkullMeta skull2Meta = (SkullMeta) skull2.getItemMeta();
+            skull2Meta.setDisplayName("§9" + adversaire.getName());
+            skull2Meta.setOwner(adversaire.getName());
+            ArrayList<String> lore2 = new ArrayList<String>();
+            lore2.add("§f ");
+            if (Game.JeuTour.get(adversaire) != null) {
+                if (Game.JeuNumeroJoueur.get(adversaire) == 1) {
+                    lore2.add("§7Couleur de pion: §6Orange");
+                } else {
+                    lore2.add("§7Couleur de pion: Gris");
+                }
+            }
+            skull2Meta.setLore(lore2);
+            skull2.setItemMeta(skull2Meta);
 
-        inv.setItem(19,skull);
-        inv.setItem(25,skull2);
+            inv.setItem(19, skull);
+            inv.setItem(25, skull2);
+        }
     }
 }

@@ -16,6 +16,7 @@ public final class Morpion extends JavaPlugin {
         plugin = this;
         System.out.println("Plugin de Morpion activé !");
         getCommand("morpion").setExecutor(new Command());
+        this.getCommand("morpion").setTabCompleter(new CommandTabCompletion());
         this.getServer().getPluginManager().registerEvents((Listener)new Listeners(), (Plugin)this);
     }
 
@@ -26,6 +27,7 @@ public final class Morpion extends JavaPlugin {
                 if (Game.JeuAdversaire.containsKey(players)) {
                     players.sendMessage("§cLa partie a été interrompue.");
                     Game.stopGame(players);
+                    players.closeInventory();
                 }
             }
         }

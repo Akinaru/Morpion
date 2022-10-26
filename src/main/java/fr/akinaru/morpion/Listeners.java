@@ -39,7 +39,7 @@ public class Listeners implements Listener {
 
         if(nom.contains("§7Morpion")){
 
-            if(Game.JeuTour.get(player).equals(player)){
+            if(Game.JeuTour.get(player) != null && Game.JeuTour.get(player).equals(player)){
                 if(e.getCurrentItem() != null && e.getCurrentItem().getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)){
                     if(e.getCurrentItem().getItemMeta().getDisplayName().contains("§7Case Libre")){
                         Game.PoserPion(player, e);
@@ -57,10 +57,15 @@ public class Listeners implements Listener {
         Inventory inv = e.getInventory();
         String name = e.getView().getTitle();
         if(name.contains("§7Morpion")){
-            Game.InventaireJoueur.remove(player);
-            Bukkit.getScheduler().runTaskLater(Morpion.getPlugin(), () -> {
-                InventoryManager.OpenInventory(player);
-            }, 20L/10);
+            //Player adversaire = Game.JeuAdversaire.get(player);
+            //Game.stopGame(player);
+            //Game.stopGame(adversaire);
+            //player.sendMessage("§7Fin de la partie, vous avez fermé le menu !");
+            //adversaire.sendMessage("§7Fin de la partie, §6"+player.getName()+" §7a fermé le menu !");
+            //Game.InventaireJoueur.remove(player);
+            //Bukkit.getScheduler().runTaskLater(Morpion.getPlugin(), () -> {
+                //InventoryManager.OpenInventory(player);
+            //}, 20L/10);
         }
     }
 
